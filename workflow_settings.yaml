@@ -1,0 +1,6 @@
+dataformCoreVersion: "3.0.0"
+
+defaultProject: "byx-data-prod"
+defaultLocation: "us-east1"
+defaultDataset: "sparrow_facta"
+defaultAssertionDataset: "assertions"

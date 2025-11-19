@@ -1,10 +1,3 @@
-config {
-  type: "table",
-  schema: "sparrow_facta",
-  name: "contract_parcela_por_vencimento"
-}
-
-
 SELECT
   dtVencimento,
   SUM(vrParcela) as TOTAL

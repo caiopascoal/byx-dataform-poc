@@ -1,37 +1,7 @@
-config {
-  type: "table",
-  schema: "sparrow_facta",
-  name: "contract_parcela",
-  tags: ["fact", "contracts"]
-}
-
-/*
-  Ajuste a query abaixo com a origem correta.
-  Aqui deixei um SELECT de exemplo.
-*/
-
-select
-  id,
-  nuParcela,
+SELECT
   dtVencimento,
-  vrParcela,
-  paga,
-  dtPagamento,
-  vrPago,
-  vrJuros,
-  vrMulta,
-  cdOrigemBaixa,
-  dtOcorrencia,
-  dsOrigemBaixa,
-  dsBaixa,
-  vrDesconto,
-  vrCredito,
-  vrSaldo,
-  idContrato,
-  dtCriacao,
-  dtAlteracao,
-  cdStatus,
-  cdUsuario,
-  dsObservacao
-from
-  `${DATASET_ORIGEM}.contract_parcela_raw`
+  SUM(vrParcela) as TOTAL
+FROM
+  sparrow_facta.contract_parcela
+
+GROUP BY 1

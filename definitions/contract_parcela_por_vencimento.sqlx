@@ -6,8 +6,8 @@ config {
 
 
 SELECT
-  dtVencimento,
-  SUM(vrParcela) as TOTAL
+  dtVencimento as data_vencimento,
+  SUM(vrParcela) as valor_parcela
 FROM
   sparrow_facta.contract_parcela
 

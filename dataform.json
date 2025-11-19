@@ -6,7 +6,6 @@
   "vars": {
     "environment": "prod"
   },
-  "canonicalProjectName": "poc",
   "includePaths": ["includes"],
   "assertionIdNaming": "table_name",
   "dataformCoreVersion": "3.0.0"

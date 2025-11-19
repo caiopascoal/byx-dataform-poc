@@ -5,3 +5,4 @@ FROM
   sparrow_facta.contract_parcela
 
 GROUP BY 1
+ORDER BY 1

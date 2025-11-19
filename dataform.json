@@ -2,7 +2,7 @@
   "warehouse": "bigquery",
   "defaultSchema": "sparrow_facta",
   "assertionSchema": "assertions",
-  "defaultDatabase": "	byx-data-prod",
+  "defaultDatabase": "byx-data-prod",
   "vars": {
     "environment": "prod"
   },

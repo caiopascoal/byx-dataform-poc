@@ -1,0 +1,15 @@
+config {
+  type: "table",
+  schema: "sparrow_facta",
+  name: "contract_parcela_por_vencimento"
+}
+
+
+SELECT
+  dtVencimento,
+  SUM(vrParcela) as TOTAL
+FROM
+  sparrow_facta.contract_parcela
+
+GROUP BY 1
+ORDER BY 1

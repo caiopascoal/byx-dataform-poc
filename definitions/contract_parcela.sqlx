@@ -1,7 +1,0 @@
-SELECT
-  dtVencimento,
-  SUM(vrParcela) as TOTAL
-FROM
-  sparrow_facta.contract_parcela
-
-GROUP BY 1

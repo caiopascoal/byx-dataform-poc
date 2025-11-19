@@ -2,12 +2,8 @@
   "warehouse": "bigquery",
   "defaultSchema": "sparrow_facta",
   "assertionSchema": "assertions",
-  "defaultDatabase": "	byx-data-prod",
+  "defaultDatabase": "byx-data-prod",
   "vars": {
     "environment": "prod"
-  },
-  "canonicalProjectName": "poc",
-  "includePaths": ["includes"],
-  "assertionIdNaming": "table_name",
-  "dataformCoreVersion": "3.0.0"
+  }
 }

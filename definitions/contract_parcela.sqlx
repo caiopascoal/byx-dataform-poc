@@ -1,25 +1,7 @@
 SELECT
-  id,
-  nuParcela,
   dtVencimento,
-  vrParcela,
-  paga,
-  dtPagamento,
-  vrPago,
-  vrJuros,
-  vrMulta,
-  cdOrigemBaixa,
-  dtOcorrencia,
-  dsOrigemBaixa,
-  dsBaixa,
-  vrDesconto,
-  vrCredito,
-  vrSaldo,
-  idContrato,
-  dtCriacao,
-  dtAlteracao,
-  cdStatus,
-  cdUsuario,
-  dsObservacao
+  SUM(vrParcela) as TOTAL
 FROM
-  `${DATASET_ORIGEM}.contract_parcela_raw`
+  sparrow_facta.contract_parcela
+
+GROUP BY 1

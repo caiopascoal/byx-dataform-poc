@@ -5,8 +5,5 @@
   "defaultDatabase": "byx-data-prod",
   "vars": {
     "environment": "prod"
-  },
-  "includePaths": ["includes"],
-  "assertionIdNaming": "table_name",
-  "dataformCoreVersion": "3.0.0"
+  }
 }

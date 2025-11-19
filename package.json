@@ -1,0 +1,8 @@
+{
+  "name": "dataform-project",
+  "version": "1.0.0",
+  "description": "Dataform project for BigQuery",
+  "dependencies": {
+    "@dataform/core": "3.0.0"
+  }
+}

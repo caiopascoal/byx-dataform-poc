@@ -1,0 +1,91 @@
+config {
+  type: "table",
+  schema: "stg_byx",
+  name: "contract_cliente",
+  tags: ["staging", "clientes"]
+}
+
+/*
+  STAGING — contract_cliente
+  Tipagem + limpeza dos dados vindos do RAW (STRING)
+*/
+
+SELECT
+  -- IDs
+  SAFE_CAST(id AS INT64) AS id,
+
+  codClienteParceiro,
+  nmCliente,
+
+  -- Datas simples
+  SAFE.PARSE_DATE('%F', SUBSTR(dtNascimento, 1, 10)) AS dtNascimento,
+
+  nmMae,
+  dsEstadoCivil,
+  nmEmail,
+  nuCNH,
+  nuRG,
+  nuCpf,
+
+  SAFE.PARSE_DATE('%F', SUBSTR(dtEmissaoRg, 1, 10)) AS dtEmissaoRg,
+
+  nmOrgaoEmissorRg,
+  nmUfOrgaoEmissorRg,
+
+  -- Valores
+  SAFE_CAST(vrSaldoFGTS AS NUMERIC) AS vrSaldoFGTS,
+  SAFE_CAST(vrRenda AS NUMERIC) AS vrRenda,
+  SAFE_CAST(vrPatrimonio AS NUMERIC) AS vrPatrimonio,
+
+  -- Endereço
+  nmEnderecoResidencialTipo,
+  nmEnderecoResidencialLogradouro,
+  nmEnderecoResidencialNumero,
+  nmEnderecoResidencialComplemento,
+  nmEnderecoResidencialBairro,
+  nmEnderecoResidencialCidade,
+  nmEnderecoResidencialUf,
+  nuEnderecoResidencialCep,
+  nuDddTelefoneCelular,
+  nuDddTelefoneResidencial,
+
+  nmSexo,
+  nmPai,
+  dsNaturalidade,
+
+  cdContaTipo,
+  nuBanco,
+  nuAgencia,
+  nuConta,
+  nuContaDigito,
+  nuCpfTitular,
+  cdCreditoTipo,
+
+  dsNacionalidade,
+  conjugeCpf, 
+
+  -- Datas adicionais
+  SAFE.PARSE_DATE('%F', SUBSTR(dtNascimentoConjuge, 1, 10)) AS dtNascimentoConjuge,
+
+  escolaridade,
+  nmConjuge,
+  tempoResidencia,
+
+  tipoCliente,
+  tipoLogradouro,
+  codFamiliarUnico,
+
+  -- Inteiros
+  SAFE_CAST(formEdFinanceira AS INT64) AS formEdFinanceira,
+  SAFE_CAST(indicador_obito AS INT64) AS indicador_obito,
+  SAFE_CAST(obito_id AS INT64) AS obito_id,
+
+  grauParentesco,
+
+  -- Datas completas com hora
+  SAFE_CAST(dtAtualizacao AS DATETIME) AS dtAtualizacao,
+  SAFE_CAST(dtCriacao AS DATETIME) AS dtCriacao,
+
+  db_name
+
+FROM `byx-data-prod.sparrow_consolidado.contract_cliente`

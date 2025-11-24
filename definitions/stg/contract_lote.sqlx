@@ -1,0 +1,84 @@
+config {
+  type: "table",
+  schema: "stg_byx",
+  name: "contract_lote",
+  tags: ["staging", "lote", "cessao"]
+}
+
+/*
+  STAGING — contract_lote
+  Tipagem + limpeza da camada RAW (STRING)
+  Origem: byx-data-prod.sparrow_consolidado.contract_lote
+*/
+
+SELECT
+  -- Identificador
+  SAFE_CAST(id AS INT64) AS id,
+
+  -- Identificadores / códigos de arquivo
+  nuArquivoCessaoParceiro,
+  SAFE_CAST(status AS INT64) AS status,
+  nuArquivoCessaoRegistrador,
+
+  -- Datas / quantidade do arquivo no registrador
+  SAFE_CAST(dtArquivoRetornoRegistrador AS DATETIME) AS dtArquivoRetornoRegistrador,
+  SAFE_CAST(qtTotalArquivoRegistrador AS INT64) AS qtTotalArquivoRegistrador,
+
+  -- Valores do arquivo/lote
+  SAFE_CAST(vrTotalArquivoRegistrador AS NUMERIC) AS vrTotalArquivoRegistrador,
+  SAFE_CAST(txCessao AS NUMERIC) AS txCessao,
+  SAFE_CAST(VlrTotalCessao AS NUMERIC) AS VlrTotalCessao,
+
+  -- Data da compra (só data)
+  SAFE.PARSE_DATE('%F', SUBSTR(dtCompra, 1, 10)) AS dtCompra,
+
+  cso,
+
+  -- Flags / indicadores
+  SAFE_CAST(loteEncerrado AS INT64) AS loteEncerrado,
+
+  -- Cessão parceiro
+  SAFE_CAST(txCessaoParceiro AS NUMERIC) AS txCessaoParceiro,
+  SAFE_CAST(vrCessaoParceiro AS NUMERIC) AS vrCessaoParceiro,
+
+  regras,
+
+  SAFE_CAST(loteGerado AS INT64) AS loteGerado,
+  SAFE_CAST(tipo_produto AS INT64) AS tipo_produto,
+  SAFE_CAST(camara_registro AS INT64) AS camara_registro,
+
+  SAFE_CAST(VlrTotalColchao AS NUMERIC) AS VlrTotalColchao,
+  SAFE_CAST(VlrTotalFuturo AS NUMERIC) AS VlrTotalFuturo,
+  SAFE_CAST(VlrTotalPresente AS NUMERIC) AS VlrTotalPresente,
+
+  SAFE_CAST(tipo_calculo AS INT64) AS tipo_calculo,
+  SAFE_CAST(txLiquida AS NUMERIC) AS txLiquida,
+
+  SAFE_CAST(bpc AS INT64) AS bpc,
+
+  SAFE_CAST(VlrTotalAgio2SemIOF AS NUMERIC) AS VlrTotalAgio2SemIOF,
+  ObsAgio2,
+  nuRegistro3CBCIP,
+
+  SAFE_CAST(agio1Calculado AS NUMERIC) AS agio1Calculado,
+
+  nmCessionario,
+  nuCnpj,
+
+  SAFE_CAST(analisado AS INT64) AS analisado,
+
+  -- Datas de controle
+  SAFE_CAST(dtAtualizacao AS DATETIME) AS dtAtualizacao,
+  SAFE_CAST(dtCriacao AS DATETIME) AS dtCriacao,
+
+  SAFE_CAST(consideraCalculoPLA AS INT64) AS consideraCalculoPLA,
+
+  SAFE_CAST(partner_id AS INT64) AS partner_id,
+  txAssignmentKeyQiTech,
+  SAFE_CAST(assignor_id AS INT64) AS assignor_id,
+
+  db_name
+
+
+FROM `byx-data-prod.sparrow_consolidado.contract_lote`
+

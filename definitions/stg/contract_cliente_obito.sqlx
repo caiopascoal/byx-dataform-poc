@@ -1,0 +1,45 @@
+config {
+  type: "table",
+  schema: "stg_byx",
+  name: "contract_cliente_obito",
+  tags: ["staging", "obito", "cartorio"]
+}
+
+/*
+  STAGING — contract_obito
+  Tipagem + limpeza da camada RAW (STRING)
+*/
+
+SELECT
+  SAFE_CAST(id AS INT64) AS id,
+
+  -- DATETIME
+  SAFE_CAST(dtCriacao AS DATETIME) AS dtCriacao,
+
+  -- CPF sempre como STRING
+  nuCpf,
+
+  -- DATE
+  SAFE.PARSE_DATE('%F', SUBSTR(dtConsulta, 1, 10)) AS dtConsulta,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtNascimento, 1, 10)) AS dtNascimento,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtObito, 1, 10)) AS dtObito,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtEmissao_registro, 1, 10)) AS dtEmissao_registro,
+
+  -- Booleano seguro
+  CASE
+    WHEN LOWER(flag_obito) IN ('true', '1', 'sim') THEN TRUE
+    ELSE FALSE
+  END AS flag_obito,
+
+  -- Strings
+  livro_registro,
+  pagina_registro,
+  termo_registro,
+  cartorio_id,
+  nmCartorio,
+  endereco_cartorio,
+  cidade_cartorio,
+
+  db_name
+
+FROM `byx-data-prod.sparrow_consolidado.contract_cliente_obito`

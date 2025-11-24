@@ -1,0 +1,37 @@
+config {
+  type: "table",
+  schema: "agg_byx",
+  name: "agg_contract_parcela",
+  description: "Agregações de parcelas agrupadas por db_name"
+}
+
+SELECT
+  db_name,
+
+  -- Quantidade de parcelas
+  COUNT(*) AS qtde_parcelas,
+
+  -- Valor total contratado
+  SUM(CAST(vrParcela AS FLOAT64)) AS total_vrParcela,
+
+  -- Valor total pago
+  SUM(CAST(vrPago AS FLOAT64)) AS total_vrPago,
+
+  -- Juros
+  AVG(CAST(vrJuros AS FLOAT64)) AS media_vrJuros,
+  SUM(CAST(vrJuros AS FLOAT64)) AS total_vrJuros,
+
+  -- Multa
+  AVG(CAST(vrMulta AS FLOAT64)) AS media_vrMulta,
+  SUM(CAST(vrMulta AS FLOAT64)) AS total_vrMulta,
+  MAX(CAST(vrMulta AS FLOAT64)) AS max_vrMulta,
+
+  -- Valor total de parcelamento (ou utilizar vrParcelaVencimento)
+  SUM(CAST(vrParcelaVencimento AS FLOAT64)) AS total_parcelamento
+
+FROM
+  `byx-data-prod.stg_byx.contract_parcela`
+GROUP BY
+  db_name
+ORDER BY
+  db_name

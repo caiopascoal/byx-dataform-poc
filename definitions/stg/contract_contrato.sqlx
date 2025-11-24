@@ -1,0 +1,140 @@
+config {
+  type: "table",
+  schema: "stg_byx",
+  name: "contract_contrato",
+  tags: ["staging", "contract", "contrato"]
+}
+
+/*
+  STAGING — contract_contrato
+  Tipagem + limpeza da camada RAW (STRING)
+*/
+
+SELECT
+  -- Identificadores básicos
+  SAFE_CAST(id AS INT64) AS id,
+  SAFE_CAST(status AS INT64) AS status,
+  nuContratoFacta,
+  SAFE_CAST(cdContratoTipo AS INT64) AS cdContratoTipo,
+  nuCnpjCorrespondente,
+
+  -- Datas principais
+  SAFE_CAST(dtDigitacao AS DATETIME) AS dtDigitacao,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtContrato, 1, 10)) AS dtContrato,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtPrimeiroVencimento, 1, 10)) AS dtPrimeiroVencimento,
+
+  -- Agente / relacionamento
+  nuCpfAgenteValidador,
+
+  -- Parcelas
+  SAFE_CAST(qtParcelasAberto AS INT64) AS qtParcelasAberto,
+  SAFE_CAST(qtParcelasPagas AS INT64) AS qtParcelasPagas,
+  SAFE_CAST(qtParcelasVencer AS INT64) AS qtParcelasVencer,
+  SAFE_CAST(qtParcelasAverbadas AS INT64) AS qtParcelasAverbadas,
+  SAFE_CAST(qtParcelasTotal AS INT64) AS qtParcelasTotal,
+
+  -- Taxas
+  SAFE_CAST(txCETAno AS NUMERIC) AS txCETAno,
+  SAFE_CAST(txCETMes AS NUMERIC) AS txCETMes,
+  SAFE_CAST(txEfetivaAno AS NUMERIC) AS txEfetivaAno,
+  SAFE_CAST(txEfetivaMes AS NUMERIC) AS txEfetivaMes,
+
+  -- Valores financeiros principais
+  SAFE_CAST(vrAberto AS NUMERIC) AS vrAberto,
+  SAFE_CAST(vrContrato AS NUMERIC) AS vrContrato,
+  SAFE_CAST(vrIof AS NUMERIC) AS vrIof,
+  SAFE_CAST(vrVencer AS NUMERIC) AS vrVencer,
+  SAFE_CAST(vrLiberadoCliente AS NUMERIC) AS vrLiberadoCliente,
+
+  -- Averbação
+  nuProtocoloAverbacao,
+  cdRetornoAverbacao,
+  SAFE_CAST(dtRetornoAverbacao AS DATETIME) AS dtRetornoAverbacao,
+
+  -- Criação do registro
+  SAFE_CAST(dtCriacao AS DATETIME) AS dtCriacao,
+  nuCessaoRetornoRegistrador,
+
+  -- Flags / indicadores
+  SAFE_CAST(possuiAlerta AS INT64) AS possuiAlerta,
+
+  -- Cessão
+  SAFE_CAST(vrCessao AS NUMERIC) AS vrCessao,
+  SAFE_CAST(txCessao AS NUMERIC) AS txCessao,
+
+  -- Relacionamentos
+  SAFE_CAST(cliente_id AS INT64) AS cliente_id,
+  SAFE_CAST(criadoPor_id AS INT64) AS criadoPor_id,
+  SAFE_CAST(lote_id AS INT64) AS lote_id,
+  codParceiro,
+
+  -- Contrato/CCB
+  nuContratoCCB,
+  SAFE_CAST(docsValidados AS INT64) AS docsValidados,
+
+  -- Custos adicionais
+  SAFE_CAST(vrSeguro AS NUMERIC) AS vrSeguro,
+  SAFE_CAST(vrTAC AS NUMERIC) AS vrTAC,
+  SAFE_CAST(custoOperacao AS NUMERIC) AS custoOperacao,
+
+  -- Indicadores de status/negócio
+  SAFE_CAST(recusado AS INT64) AS recusado,
+  SAFE_CAST(tipoProduto AS INT64) AS tipoProduto,
+  SAFE_CAST(contratoCedidoFDIC AS INT64) AS contratoCedidoFDIC,
+  SAFE_CAST(cedidoFundo AS INT64) AS cedidoFundo,
+
+  -- Fundo / cessão secundária
+  SAFE_CAST(nmFundo_id AS INT64) AS nmFundo_id,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtCedidoFundo, 1, 10)) AS dtCedidoFundo,
+
+  SAFE_CAST(beneficio_id AS INT64) AS beneficio_id,
+  SAFE_CAST(clientePj_id AS INT64) AS clientePj_id,
+
+  SAFE_CAST(retornoDocParceiro AS INT64) AS retornoDocParceiro,
+  SAFE_CAST(contratoAtraso AS INT64) AS contratoAtraso,
+  SAFE_CAST(contratoLiquidado AS INT64) AS contratoLiquidado,
+
+  -- Ágio / estruturas derivadas
+  SAFE_CAST(vrAgio2Colchao AS NUMERIC) AS vrAgio2Colchao,
+  SAFE_CAST(vrAgio2Futuro AS NUMERIC) AS vrAgio2Futuro,
+  SAFE_CAST(vrAgio2Presente AS NUMERIC) AS vrAgio2Presente,
+  SAFE_CAST(vrAgio2SemIOF AS NUMERIC) AS vrAgio2SemIOF,
+
+  -- Integrações externas / controle
+  qiTechUuid,
+  dententorRubricaAverbacao,
+  SAFE_CAST(ofertado AS INT64) AS ofertado,
+  IPOC,
+  SAFE_CAST(acordoSegurado AS INT64) AS acordoSegurado,
+  SAFE_CAST(vrRCO AS NUMERIC) AS vrRCO,
+  SAFE_CAST(controleDiferido_id AS INT64) AS controleDiferido_id,
+  SAFE_CAST(txTIR AS NUMERIC) AS txTIR,
+  nuAverbacao,
+
+  SAFE_CAST(contratoGarantia AS INT64) AS contratoGarantia,
+  SAFE_CAST(indicadorOver AS INT64) AS indicadorOver,
+  SAFE_CAST(vrContratoAtraso AS NUMERIC) AS vrContratoAtraso,
+
+  -- Bancarizador
+  nuCnpjBancarizador,
+  nmBancarizador,
+
+  -- Originação (limpeza do caractere isolado ')
+  CASE
+    WHEN TRIM(idContratoOriginacao) = "'" THEN NULL
+    ELSE idContratoOriginacao
+  END AS idContratoOriginacao,
+
+  -- Datas de atualização / vigência / cessão
+  SAFE_CAST(dtAtualizacao AS DATETIME) AS dtAtualizacao,
+  nuContratoRefinanciamento,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtVigencia, 1, 10)) AS dtVigencia,
+  SAFE_CAST(agioContrato AS NUMERIC) AS agioContrato,
+  SAFE.PARSE_DATE('%F', SUBSTR(dtCessao, 1, 10)) AS dtCessao,
+
+  SAFE_CAST(vrPresenteContrato AS NUMERIC) AS vrPresenteContrato,
+
+  -- Origem do dado
+  db_name
+
+FROM `byx-data-prod.sparrow_consolidado.contract_contrato`

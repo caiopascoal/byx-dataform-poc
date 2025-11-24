@@ -1,0 +1,74 @@
+config {
+  type: "table",
+  schema: "stg_byx",
+  name: "contract_parcela",
+  tags: ["staging", "contract", "parcela"]
+}
+
+/*
+  STAGING — contract_parcela
+  Tipagem + limpeza da camada RAW (STRING)
+*/
+
+SELECT
+  -- chaves / identificação
+  SAFE_CAST(id AS INT64) AS id,
+  SAFE_CAST(nuParcela AS INT64) AS nuParcela,
+  SAFE_CAST(contrato_id AS INT64) AS contrato_id,
+
+  -- datas principais
+  SAFE.PARSE_DATETIME('%F %T', dtVencimento)        AS dtVencimento,
+  SAFE.PARSE_DATETIME('%F %T', dtPagamento)         AS dtPagamento,
+  SAFE.PARSE_DATETIME('%F %T', dtCompra)            AS dtCompra,
+  SAFE.PARSE_DATETIME('%F %T', dtUltimaAtualizacao) AS dtUltimaAtualizacao,
+  SAFE.PARSE_DATETIME('%F %T', dtEstorno)           AS dtEstorno,
+  SAFE.PARSE_DATETIME('%F %T', dtAtualizacao)       AS dtAtualizacao,
+  SAFE.PARSE_DATETIME('%F %T', dtCriacao)           AS dtCriacao,
+  SAFE.PARSE_DATETIME('%F %T', dtEscrituracao)      AS dtEscrituracao,
+  SAFE.PARSE_DATETIME('%F %T', dtUltEscrituracao)   AS dtUltEscrituracao,
+
+  -- valores da parcela
+  SAFE_CAST(vrParcela            AS NUMERIC) AS vrParcela,
+  SAFE_CAST(vrPago               AS NUMERIC) AS vrPago,
+  SAFE_CAST(vrJuros              AS NUMERIC) AS vrJuros,
+  SAFE_CAST(vrMulta              AS NUMERIC) AS vrMulta,
+  SAFE_CAST(vrParcelaVencimento  AS NUMERIC) AS vrParcelaVencimento,
+  SAFE_CAST(vrCompra             AS NUMERIC) AS vrCompra,
+  SAFE_CAST(vrPrincipalParcela   AS NUMERIC) AS vrPrincipalParcela,
+  SAFE_CAST(saldoDevedorParcela  AS NUMERIC) AS saldoDevedorParcela,
+  SAFE_CAST(vrCessaoFIDC         AS NUMERIC) AS vrCessaoFIDC,
+  SAFE_CAST(vrColchao            AS NUMERIC) AS vrColchao,
+  SAFE_CAST(vrDiferido           AS NUMERIC) AS vrDiferido,
+  SAFE_CAST(percentualPagamento  AS NUMERIC) AS percentualPagamento,
+  SAFE_CAST(vrEsperadoNF         AS NUMERIC) AS vrEsperadoNF,
+  SAFE_CAST(vrGerarNF            AS NUMERIC) AS vrGerarNF,
+  SAFE_CAST(vrChargeback         AS NUMERIC) AS vrChargeback,
+  SAFE_CAST(vrColchaoDiferido    AS NUMERIC) AS vrColchaoDiferido,
+  SAFE_CAST(vrPresente           AS NUMERIC) AS vrPresente,
+  SAFE_CAST(vrDescontoColchao    AS NUMERIC) AS vrDescontoColchao,
+  SAFE_CAST(vrPagoChargeback     AS NUMERIC) AS vrPagoChargeback,
+  SAFE_CAST(IOFAdicional         AS NUMERIC) AS IOFAdicional,
+  SAFE_CAST(IOFPrincipal         AS NUMERIC) AS IOFPrincipal,
+  SAFE_CAST(vrEstorno            AS NUMERIC) AS vrEstorno,
+  SAFE_CAST(vrPresenteLiquidacao AS NUMERIC) AS vrPresenteLiquidacao,
+
+  -- flags / inteiros
+  SAFE_CAST(paga                AS INT64) AS paga,
+  SAFE_CAST(recebido_facta      AS INT64) AS recebido_facta,
+  SAFE_CAST(parcelaOfertada     AS INT64) AS parcelaOfertada,
+  SAFE_CAST(status              AS INT64) AS status,
+  SAFE_CAST(cdEscrituracaoAtiva AS INT64) AS cdEscrituracaoAtiva,
+  SAFE_CAST(smParcelaPaga       AS INT64) AS smParcelaPaga,
+  SAFE_CAST(smParcelaVencimento AS INT64) AS smParcelaVencimento,
+
+  -- taxas
+  SAFE_CAST(txNegociacao AS NUMERIC) AS txNegociacao,
+
+  -- textos / códigos
+  SAFE_CAST(cdOrigemBaixa   AS STRING) AS cdOrigemBaixa,
+  SAFE_CAST(nuCodParceiro   AS STRING) AS nuCodParceiro,
+  SAFE_CAST(descricaoBaixa  AS STRING) AS descricaoBaixa,
+  SAFE_CAST(tpBaixa         AS STRING) AS tpBaixa,
+  SAFE_CAST(db_name         AS STRING) AS db_name
+
+FROM `byx-data-prod.sparrow_consolidado.contract_parcela`
